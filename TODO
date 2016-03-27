@@ -1,4 +1,4 @@
-1. Create BehatVariablesExtension + services.yml + BehatVariablesArgumentTransformer
-2. Create BehatVariablesContext
+1. v
+2. v
 3. Create BehatVariablesStorage
 4. Test BehatVariablesContext with behat features, like Behat tests itself, e.g. context.feature

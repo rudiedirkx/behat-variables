@@ -1,0 +1,5 @@
+services:
+  transformation.argument_transformer.behatvars:
+    class: rdx\behatvars\BehatVariablesArgumentTransformer
+    tags:
+      -  { name: transformation.argument_transformer, priority: 100 }
