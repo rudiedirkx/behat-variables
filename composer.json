@@ -1,0 +1,21 @@
+{
+    "name": "rdx/behat-variables",
+    "description": "Store variables across Scenarios during Behat testing",
+    "type": "library",
+    "require-dev": {
+        "behat/behat": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "rdx\\behatvars\\": ""
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rudie Dirkx",
+            "email": "github@hotblocks.nl"
+        }
+    ],
+    "minimum-stability": "dev"
+}
