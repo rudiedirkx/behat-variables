@@ -4,6 +4,8 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
+use rdx\behatvars\BehatVariablesDatabase;
 
 class SimpleFeatureContext implements Context, SnippetAcceptingContext {
 
@@ -34,7 +36,18 @@ class SimpleFeatureContext implements Context, SnippetAcceptingContext {
 	 * @Then the database should contain:
 	 */
 	public function theDatabaseShouldContain(PyStringNode $string) {
-		throw new \Exception("My context has no way to access the database...");
+		// Convert database to TableNode, to compare against test string
+		$table = array();
+		foreach (BehatVariablesDatabase::all() as $name => $value) {
+			$table[] = array($name, $value);
+		}
+
+		$table = new TableNode($table);
+		$table = trim($table);
+
+		if (trim($string) != $table) {
+			throw new \Exception("Database contents are wrong:\n$table");
+		}
 	}
 
 }

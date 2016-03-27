@@ -5,6 +5,7 @@ namespace rdx\behatvars;
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Transformation\Transformer\ArgumentTransformer;
 use rdx\behatvars\BehatVariablesContext;
+use rdx\behatvars\BehatVariablesDatabase;
 
 class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 
@@ -28,8 +29,7 @@ class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 	 */
 	public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue) {
 		return
-			is_string($argumentValue) &&
-			($this->context = $this->getContext($definitionCall)) &&
+			is_scalar($argumentValue) &&
 			preg_match_all(self::SLOT_NAME_REGEX, $argumentValue, $this->matches, PREG_SET_ORDER);
 	}
 
@@ -39,22 +39,10 @@ class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 	public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue) {
 		$replacements = array();
 		foreach ($this->matches as $match) {
-			$replacements[ $match[0] ] = $this->context->storageGet($match[1]);
+			$replacements[ $match[0] ] = BehatVariablesDatabase::get($match[1]);
 		}
 
 		return strtr($argumentValue, $replacements);
-	}
-
-	/**
-	 *
-	 */
-	protected function getContext(DefinitionCall $definitionCall) {
-		$contexts = $definitionCall->getEnvironment()->getContexts();
-		foreach ($contexts as $context) {
-			if ($context instanceof BehatVariablesContext) {
-				return $context;
-			}
-		}
 	}
 
 }

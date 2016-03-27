@@ -7,19 +7,11 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\AfterFeatureScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use rdx\behatvars\BehatVariablesArgumentTransformer;
+use rdx\behatvars\BehatVariablesDatabase;
 
 class BehatVariablesContext implements Context, SnippetAcceptingContext {
 
 	protected $lastResult = [];
-
-	static protected $storage = array();
-
-	/**
-	 * Initializes context.
-	 */
-	public function __construct() {
-
-	}
 
 
 
@@ -45,7 +37,7 @@ class BehatVariablesContext implements Context, SnippetAcceptingContext {
 	 * @AfterFeature
 	 */
 	static public function afterFeature(AfterFeatureScope $scope) {
-		self::storageClear();
+		BehatVariablesDatabase::clear();
 	}
 
 
@@ -72,42 +64,10 @@ class BehatVariablesContext implements Context, SnippetAcceptingContext {
 
 		foreach ($slots as $index => $slot) {
 			$value = $this->lastResult[$index];
-			$this->storageSet($slot, $value);
+			BehatVariablesDatabase::set($slot, $value);
 		}
 
 		$this->lastResult = [];
-	}
-
-
-
-	/**
-	 *
-	 */
-	protected function storageSet($name, $value) {
-		if (!is_scalar($value)) {
-			$type = gettype($value);
-			throw new \Exception("Storing value must be scalar, but it's a '$type'.");
-		}
-
-		self::$storage[$name] = $value;
-	}
-
-	/**
-	 *
-	 */
-	public function storageGet($name) {
-		if (!isset(self::$storage[$name])) {
-			throw new \Exception("Value for '$name' does not exist.");
-		}
-
-		return self::$storage[$name];
-	}
-
-	/**
-	 *
-	 */
-	static protected function storageClear() {
-		self::$storage = array();
 	}
 
 }
