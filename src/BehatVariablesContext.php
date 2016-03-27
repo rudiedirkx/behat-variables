@@ -51,9 +51,9 @@ class BehatVariablesContext implements Context, SnippetAcceptingContext {
 
 
 	/**
-	 * @When behat saves it into :slot
+	 * @When /^(?:I|we) save (?:it|that|those|them) into "([\w,]+)"$/
 	 */
-	public function behatSavesItInto($slot) {
+	public function saveItInto($slot) {
 		if (!$this->lastResult) {
 			throw new \Exception("Can't store empty return value. Have a step method return a value.");
 		}
