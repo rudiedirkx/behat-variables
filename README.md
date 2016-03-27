@@ -5,4 +5,4 @@ Behat Variables
 
 Stores variables across scenarios during testing.
 
-See features/simple.feature for examples.
+See `features/simple.feature` for examples.
