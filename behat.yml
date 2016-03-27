@@ -1,0 +1,8 @@
+default:
+  suites:
+    default:
+      contexts:
+        - rdx\behatvars\BehatVariablesContext
+        - SimpleFeatureContext
+  extensions:
+      rdx\behatvars\BehatVariablesExtension: ~
