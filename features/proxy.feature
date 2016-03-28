@@ -1,4 +1,4 @@
-Feature: Simple case
+Feature: Proxy features to test fails
 
 	Background:
 		Given a file named "behat.yml" with:
