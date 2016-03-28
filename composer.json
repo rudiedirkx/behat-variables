@@ -2,7 +2,7 @@
     "name": "rdx/behat-variables",
     "description": "Store variables across Scenarios during Behat testing",
     "type": "library",
-    "require-dev": {
+    "require": {
         "behat/behat": "^3.0"
     },
     "autoload": {
@@ -18,7 +18,7 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {
-        "symfony/process": "2.1"
+    "require-dev": {
+        "symfony/process": "^2.1"
     }
 }
