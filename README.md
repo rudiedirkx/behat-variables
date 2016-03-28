@@ -41,6 +41,22 @@ See the Behat docs for where they fit in `behat.yml`, or see this repo's `behat.
 	  extensions:
 	      rdx\behatvars\BehatVariablesExtension: ~
 
+And make sure your custom steps have a **scalar return value, or an array of scalars**:
+
+	/**
+	 * @Given a value :value
+	 */
+	public function aValue($value) {
+	  return $value;
+	}
+
+	/**
+	 * @Given values :value1 and :value2
+	 */
+	public function valuesAnd($value1, $value2) {
+	  return [$value1, $value2];
+	}
+
 Examples
 ----
 
@@ -61,5 +77,3 @@ So you can make several custom step combinations:
 
 	Given a user "Fred" in organization "McDonald's"  # Custom
 	And we save those into "USER,ORGANIZATION"        # Provided
-
-Just make sure your custom steps have a **scalar return value, or an array of scalars**.
