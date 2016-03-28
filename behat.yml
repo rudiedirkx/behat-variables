@@ -1,4 +1,4 @@
-default:
+simple:
   suites:
     default:
       contexts:
@@ -6,3 +6,8 @@ default:
         - SimpleFeatureContext
   extensions:
       rdx\behatvars\BehatVariablesExtension: ~
+proxy:
+  suites:
+    default:
+      contexts:
+        - ProxyFeatureContext

@@ -3,4 +3,7 @@ php:
   - '5.6'
 install:
   - composer install
-script: vendor/bin/behat
+script: >
+  vendor/bin/behat --profile=proxy features/proxy.feature &&
+  echo &&
+  vendor/bin/behat --profile=simple features/simple.feature

@@ -17,5 +17,8 @@
             "email": "github@hotblocks.nl"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "require": {
+        "symfony/process": "2.1"
+    }
 }
