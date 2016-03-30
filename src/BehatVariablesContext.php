@@ -6,6 +6,7 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\AfterFeatureScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Behat\Tester\Result\ExecutedStepResult;
 use rdx\behatvars\BehatVariablesArgumentTransformer;
 use rdx\behatvars\BehatVariablesDatabase;
 
@@ -22,13 +23,10 @@ class BehatVariablesContext implements Context, SnippetAcceptingContext {
 		$this->lastResult = [];
 
 		$result = $scope->getTestResult();
-		if (is_callable(array($result, 'getCallResult'))) {
-			$result = $result->getCallResult();
-			if (is_callable(array($result, 'getReturn'))) {
-				$result = $result->getReturn();
-				if ($result !== null) {
-					$this->lastResult = is_array($result) && isset($result[0]) ? array_values($result) : [$result];
-				}
+		if ($result instanceof ExecutedStepResult) {
+			$result = $result->getCallResult()->getReturn();
+			if ($result !== null) {
+				$this->lastResult = is_array($result) && isset($result[0]) ? array_values($result) : [$result];
 			}
 		}
 	}
