@@ -2,6 +2,7 @@ Behat Variables
 ====
 
 [![Build Status](https://travis-ci.org/rudiedirkx/behat-variables.svg?branch=master)](https://travis-ci.org/rudiedirkx/behat-variables)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rudiedirkx/behat-variables/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rudiedirkx/behat-variables/?branch=master)
 
 Stores your custom variables across Scenarios during Feature testing.
 
