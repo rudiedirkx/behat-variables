@@ -1,1 +1,1 @@
-source run-proxies.sh && echo && source run-simples.sh
+./bin/run-proxies.sh && echo && ./bin/run-simples.sh
