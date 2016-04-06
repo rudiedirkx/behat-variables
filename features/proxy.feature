@@ -11,7 +11,7 @@ Feature: Proxy features to test fails
 			        - rdx\behatvars\BehatVariablesContext
 			        - FeatureContext
 			  extensions:
-			      rdx\behatvars\BehatVariablesExtension: ~
+			    rdx\behatvars\BehatVariablesExtension: ~
 			"""
 		And a file named "features/bootstrap/FeatureContext.php" with:
 			"""
@@ -26,6 +26,11 @@ Feature: Proxy features to test fails
 			    return $value;
 			  }
 
+			  /** @Given values :value1 and :value2 */
+			  public function valuesAnd($value1, $value2) {
+			    return [$value1, $value2];
+			  }
+
 			  /** @Then :value1 should equal :value2 */
 			  public function shouldEqual($value1, $value2) {
 			    if ($value1 != $value2) {
@@ -34,14 +39,17 @@ Feature: Proxy features to test fails
 			  }
 			}
 			"""
-		And   a file named "features/test.feature" with:
+		And a file named "features/test.feature" with:
 			"""
 			Feature: Remember a variable
 
 			  Scenario: Remember a variable
 			    Given a value "50"
 			    And I save it into "X"
+			    Given a value "51"
+			    And I save it into "y"
 			    Then "<<X>>" should equal "50"
+			    And "<<y>>" should equal "51"
 			"""
 
 	Scenario: Forgetting BehatVariablesExtension
@@ -57,15 +65,15 @@ Feature: Proxy features to test fails
 		When I run behat
 		Then it should fail with:
 			"""
-			..F
+			....F-
 
 			--- Failed steps:
 
-			  Then "<<X>>" should equal "50" # features/test.feature:6
+			  Then "<<X>>" should equal "50" # features/test.feature:8
 			    value1 (<<X>>) does not equal value2 (50) (Exception)
 
 			1 scenario (1 failed)
-			3 steps (2 passed, 1 failed)
+			6 steps (4 passed, 1 failed, 1 skipped)
 			"""
 
 	Scenario: Forgetting BehatVariablesContext
@@ -82,28 +90,70 @@ Feature: Proxy features to test fails
 		When I run behat
 		Then it should fail with:
 			"""
-			.U-
+			.U-U--
 
 			1 scenario (1 undefined)
-			3 steps (1 passed, 1 undefined, 1 skipped)
-
-			--- FeatureContext has missing steps. Define them with these snippets:
-
-			  /**
-			   * @Given I save it into :arg1
-			   */
-			  public function iSaveItInto($arg1)
-			  {
-			    throw new PendingException();
-			  }
+			6 steps (1 passed, 2 undefined, 3 skipped)
 			"""
 
 	Scenario: Remember a variable
 		When I run behat
 		Then it should pass with:
 			"""
-			...
+			......
 
 			1 scenario (1 passed)
-			3 steps (3 passed)
+			6 steps (6 passed)
+			"""
+
+	Scenario: Invalid slot names
+		Given a file named "features/test.feature" with:
+			"""
+			Feature: Remember a variable
+
+			  Scenario: Remember a variable
+			    Given a value "50"
+			    And I save it into "123abc"
+			    And a value "51"
+			    And I save it into "=="
+			    And a value "52"
+			    And I save it into "<<abc>>"
+			"""
+		When I run behat
+		Then it should fail with:
+			"""
+			.F----
+
+			--- Failed steps:
+
+			  And I save it into "123abc" # features/test.feature:5
+			    Invalid slot name(s) in '123abc'. Beware the white space! (Exception)
+
+			1 scenario (1 failed)
+			6 steps (1 passed, 1 failed, 4 skipped)
+			"""
+
+	Scenario: Invalid slot names due to spaces
+		Given a file named "features/test.feature" with:
+			"""
+			Feature: Remember a variable
+
+			  Scenario: Remember a variable
+			    Given values "50" and "51"
+			    And I save them into "X, Y"
+			    Then "<<X>>" should equal "50"
+			    And "<<Y>>" should equal "51"
+			"""
+		When I run behat
+		Then it should fail with:
+			"""
+			.F--
+
+			--- Failed steps:
+
+			  And I save them into "X, Y" # features/test.feature:5
+			    Invalid slot name(s) in 'X, Y'. Beware the white space! (Exception)
+
+			1 scenario (1 failed)
+			4 steps (1 passed, 1 failed, 2 skipped)
 			"""

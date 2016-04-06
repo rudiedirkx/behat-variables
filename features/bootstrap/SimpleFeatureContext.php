@@ -24,6 +24,13 @@ class SimpleFeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
+	 * @Given values :value1 and :value2 and :value3
+	 */
+	public function valuesAndAnd($value1, $value2, $value3) {
+		return [$value1, $value2, $value3];
+	}
+
+	/**
 	 * @Then :a should equal :b
 	 */
 	public function shouldEqual($a, $b) {

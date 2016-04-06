@@ -11,7 +11,7 @@ class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 
 	const SLOT_NAME_OPEN = '<<';
 	const SLOT_NAME_CLOSE = '>>';
-	const SLOT_NAME_REGEX = '#<<(\w+)>>#i';
+	const SLOT_NAME_REGEX = '#<<([a-z]\w*)>>#i';
 
 	protected $context;
 	protected $matches;
@@ -20,6 +20,11 @@ class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 	 *
 	 */
 	static public function validSlotName($slot) {
+		// Empty is allowed, and must be handled by the caller.
+		if ($slot === '') {
+			return true;
+		}
+
 		$slot = self::SLOT_NAME_OPEN . $slot . self::SLOT_NAME_CLOSE;
 		return preg_match(self::SLOT_NAME_REGEX, $slot);
 	}

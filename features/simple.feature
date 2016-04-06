@@ -38,3 +38,14 @@ Feature: Load package classes into feature
 		| D | 50      |
 		| E | foo bar |
 		"""
+
+	Scenario: Skip variables
+		Given a value "15"
+		And I save it into "A"
+		And values "foo1" and "bar1" and "baz1"
+		And I save them into ",S_1_2,"
+		And values "foo2" and "bar2" and "baz2"
+		And I save them into "S_2_1,,S_2_3"
+		Then "<<S_1_2>>" should equal "bar1"
+		And "<<S_2_1>>" should equal "foo2"
+		And "<<S_2_3>>" should equal "baz2"

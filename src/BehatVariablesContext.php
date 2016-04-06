@@ -41,7 +41,7 @@ class BehatVariablesContext implements Context, SnippetAcceptingContext {
 
 
 	/**
-	 * @When /^(?:I|we) save (?:it|that|those|them) into "([\w,]+)"$/
+	 * @When /^(?:I|we) save (?:it|that|those|them) into "([^"]+)"$/
 	 */
 	public function saveItInto($slot) {
 		if (!$this->lastResult) {
@@ -57,12 +57,14 @@ class BehatVariablesContext implements Context, SnippetAcceptingContext {
 
 		$valids = array_filter($slots, [BehatVariablesArgumentTransformer::class, 'validSlotName']);
 		if ($valids !== $slots) {
-			throw new \Exception("Invalid slot name(s) in '$slot'");
+			throw new \Exception("Invalid slot name(s) in '$slot'. Beware the white space!");
 		}
 
 		foreach ($slots as $index => $slot) {
-			$value = $this->lastResult[$index];
-			BehatVariablesDatabase::set($slot, $value);
+			if ($slot) {
+				$value = $this->lastResult[$index];
+				BehatVariablesDatabase::set($slot, $value);
+			}
 		}
 
 		$this->lastResult = [];

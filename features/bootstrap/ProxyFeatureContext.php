@@ -82,7 +82,7 @@ class ProxyFeatureContext implements Context, SnippetAcceptingContext {
 			$this->phpBin,
 			escapeshellarg(BEHAT_BIN_PATH),
 			$argumentsString,
-			strtr('--no-colors --strict --format=progress --format-settings=\'{"timer": false}\'', array(
+			strtr('--no-colors --no-snippets --strict --format=progress --format-settings=\'{"timer": false}\'', array(
 				'\'' => '"',
 				'"' => '\"',
 			))
