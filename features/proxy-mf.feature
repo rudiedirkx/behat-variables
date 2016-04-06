@@ -1,3 +1,4 @@
+@proxy
 Feature: Proxy multiple features
 
 	Background:

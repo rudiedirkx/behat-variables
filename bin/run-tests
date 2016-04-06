@@ -1,3 +1,0 @@
-vendor/bin/behat --profile=proxy --format-settings='{"paths":false}' features/proxy.feature &&
-echo &&
-vendor/bin/behat --profile=simple --format-settings='{"paths":false}' features/simple.feature

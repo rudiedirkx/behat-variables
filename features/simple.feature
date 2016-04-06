@@ -1,3 +1,4 @@
+@simple
 Feature: Load package classes into feature
 
 	Scenario: Remember 1 variable

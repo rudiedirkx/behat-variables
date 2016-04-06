@@ -1,3 +1,4 @@
+@proxy
 Feature: Proxy features to test fails
 
 	Background:

@@ -1,6 +1,7 @@
 simple:
   suites:
     default:
+      filters: {tags: '@simple'}
       contexts:
         - rdx\behatvars\BehatVariablesContext
         - SimpleFeatureContext
@@ -9,5 +10,6 @@ simple:
 proxy:
   suites:
     default:
+      filters: {tags: '@proxy'}
       contexts:
         - ProxyFeatureContext
