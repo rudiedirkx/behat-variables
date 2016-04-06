@@ -105,7 +105,7 @@ class ProxyFeatureContext implements Context, SnippetAcceptingContext {
 	 */
 	public function itShouldPassWith($shouldPassFail, PyStringNode $string) {
 		$shouldPass = $shouldPassFail == 'pass';
-		$passed = $this->getExitCode() == 0;
+		$passed = $this->getExitCode() === 0;
 
 		$output = trim($this->getOutput());
 
