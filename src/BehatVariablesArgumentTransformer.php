@@ -4,8 +4,7 @@ namespace rdx\behatvars;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Transformation\Transformer\ArgumentTransformer;
-use rdx\behatvars\BehatVariablesContext;
-use rdx\behatvars\BehatVariablesDatabase;
+use Behat\Gherkin\Node\PyStringNode;
 
 class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 
@@ -34,7 +33,7 @@ class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 	 */
 	public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue) {
 		return
-			is_scalar($argumentValue) &&
+            ($argumentValue instanceof PyStringNode || is_scalar($argumentValue)) &&
 			preg_match_all(self::SLOT_NAME_REGEX, $argumentValue, $this->matches, PREG_SET_ORDER);
 	}
 
@@ -47,7 +46,14 @@ class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 			$replacements[ $match[0] ] = BehatVariablesDatabase::get($match[1]);
 		}
 
-		return strtr($argumentValue, $replacements);
+		$newArgumentValue = strtr((string) $argumentValue, $replacements);
+
+		if ($argumentValue instanceof PyStringNode) {
+			$newArgumentValue = explode("\n", $newArgumentValue);
+			$newArgumentValue = new PyStringNode($newArgumentValue, count($newArgumentValue));
+		}
+
+		return $newArgumentValue;
 	}
 
 }

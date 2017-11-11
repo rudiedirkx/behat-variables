@@ -57,4 +57,10 @@ class SimpleFeatureContext implements Context, SnippetAcceptingContext {
 		}
 	}
 
+	/**
+	 * @Then set into :variable variable text:
+	 */
+	public function setIntoVariableText($variable, PyStringNode $string) {
+		BehatVariablesDatabase::set($variable, (string) $string);
+	}
 }

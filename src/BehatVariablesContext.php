@@ -7,8 +7,6 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\AfterFeatureScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
-use rdx\behatvars\BehatVariablesArgumentTransformer;
-use rdx\behatvars\BehatVariablesDatabase;
 
 class BehatVariablesContext implements Context, SnippetAcceptingContext {
 
@@ -70,4 +68,25 @@ class BehatVariablesContext implements Context, SnippetAcceptingContext {
 		$this->lastResult = [];
 	}
 
+	/**
+	 * If it is needed to set variable from different behat context
+	 *
+	 * @param mixed $slot
+	 * @param mixed $value
+	 */
+	public function setVariable($slot, $value)
+	{
+		BehatVariablesDatabase::set($slot, $value);
+	}
+
+	/**
+	 * If it is needed to get variable from different behat context
+	 *
+	 * @param mixed $slot
+	 * @return mixed
+	 */
+	public function getVariable($slot)
+	{
+		BehatVariablesDatabase::get($slot);
+	}
 }

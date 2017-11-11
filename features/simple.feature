@@ -49,3 +49,12 @@ Feature: Load package classes into feature
 		Then "<<S_1_2>>" should equal "bar1"
 		And "<<S_2_1>>" should equal "foo2"
 		And "<<S_2_3>>" should equal "baz2"
+
+	Scenario: Test PyStringNode
+		Given a value "100"
+		And I save it into "A"
+		And set into "TEXT" variable text:
+		"""
+		Number <<A>>
+		"""
+		And "<<TEXT>>" should equal "Number 100"
