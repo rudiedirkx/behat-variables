@@ -87,6 +87,6 @@ class BehatVariablesContext implements Context, SnippetAcceptingContext {
 	 */
 	public function getVariable($slot)
 	{
-		BehatVariablesDatabase::get($slot);
+		return BehatVariablesDatabase::get($slot);
 	}
 }
