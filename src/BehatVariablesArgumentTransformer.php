@@ -5,6 +5,7 @@ namespace rdx\behatvars;
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Transformation\Transformer\ArgumentTransformer;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
 
 class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 
@@ -32,15 +33,24 @@ class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 	 *
 	 */
 	public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue) {
-		return
-            ($argumentValue instanceof PyStringNode || is_scalar($argumentValue)) &&
-			preg_match_all(self::SLOT_NAME_REGEX, $argumentValue, $this->matches, PREG_SET_ORDER);
+		// Check if the given argument is supported and if so if it contains tokens.
+		switch (true) {
+		  case is_scalar($argumentValue):
+		  case $argumentValue instanceof PyStringNode:
+		  case $argumentValue instanceof TableNode:
+		     return (bool) preg_match_all(self::SLOT_NAME_REGEX, (string) $argumentValue, $this->matches, PREG_SET_ORDER);
+		}
+		return false;
 	}
 
 	/**
 	 *
 	 */
 	public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue) {
+		// If this is a NodeTable we need to process every row / column separately.
+		if ($argumentValue instanceof TableNode) {
+			return $this->transformNodeTableArgument($definitionCall, $argumentIndex, $argumentValue);
+		}
 		$replacements = array();
 		foreach ($this->matches as $match) {
 			$replacements[ $match[0] ] = BehatVariablesDatabase::get($match[1]);
@@ -56,4 +66,19 @@ class BehatVariablesArgumentTransformer implements ArgumentTransformer {
 		return $newArgumentValue;
 	}
 
+	/**
+	 * Transforms a whole argument table.
+	 *
+	 * @param TableNode $argumentValue
+	 */
+	public function transformNodeTableArgument(DefinitionCall $definitionCall, $argumentIndex, TableNode $argumentValue) {
+		$newTableData = $argumentValue->getTable();
+		foreach ($newTableData as $i => $row) {
+			foreach ($row as $c => $v) {
+				// Re-use the scalar replacement function.
+				$newTableData[$i][$c] = $this->transformArgument($definitionCall, $i, $v);
+			}
+		}
+		return new TableNode($newTableData);
+	}
 }
